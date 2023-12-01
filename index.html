@@ -1,54 +1,21 @@
 <!DOCTYPE html>
-<html lang="en">
-<head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>FullCalendar Example</title>
-  
-  <!-- FullCalendarのCSSファイルのリンク -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.css"
-    integrity="sha512-DNjB2hvKw1O2C/p6IbIqf2mPhI0z0ek5f7Z6NfIt25vU6bbfIqOtpKCa5eieBzA7PnJd16xXZjBbK0Qop5OdA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer" />
+<html lang='en'>
+  <head>
+    <meta charset='utf-8' />
+    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+    <script>
 
-  <!-- FullCalendarのJavaScriptファイルのリンク -->
-  <script src="https://code.jquery.com/jquery-3.6.4.min.js"
-    integrity="sha512-cpIS2k6Lop9auyXqCjBt9o2Et61UO2O7/Z+dLIl5PJflU7Lc1i9ixR0VXJQehVssU+REKlIqH00P3/XaOQ4Ogg=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"
-    integrity="sha512-r51PcI5A6SVvErREKco5At6r8gCGfQcbJ5l3L1jtNDMXd9QZMn0zXakf3yi5bL2idPQyT6A2ZL52XYY2+I3avA=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/fullcalendar/3.10.2/fullcalendar.min.js"
-    integrity="sha512-fWkzVdMwUJtQUt49q5gubc2OKlqHKE5O5KQP4o21W9bTV23BjVMzAjXn38+Tft+6jsFfD4zm93LZDy98khpGZw=="
-    crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
-  <!-- カレンダーのスタイル調整や他の設定があればここで追加 -->
-
-</head>
-<body>
-
-  <!-- カレンダーを表示する要素 -->
-  <div id="calendar"></div>
-
-  <script>
-    $(document).ready(function () {
-      $('#calendar').fullCalendar({
-        header: {
-          left: 'prev,next today',
-          center: 'title',
-          right: 'month,agendaWeek,agendaDay'
-        },
-        // カレンダーの設定やイベントの設定
-        events: [
-          {
-            title: 'イベント1',
-            start: '2023-12-01T10:00:00',
-            end: '2023-12-01T12:00:00'
-          },
-          // 他のイベントの設定
-        ]
+      document.addEventListener('DOMContentLoaded', function() {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+          initialView: 'dayGridMonth'
+        });
+        calendar.render();
       });
-    });
-  </script>
 
-</body>
+    </script>
+  </head>
+  <body>
+    <div id='calendar'></div>
+  </body>
 </html>
