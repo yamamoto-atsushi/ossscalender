@@ -10,8 +10,10 @@
         var calendarEl = document.getElementById('calendar');
         var calendar = new FullCalendar.Calendar(calendarEl, {
           initialView: 'dayGridMonth',
-
-
+	        googleCalendarApiKey: "AIzaSyA9iTpENaQ5ewT_yrzUCaG6Pw1gLkcqzCc",
+	        events: {
+		        googleCalendarId: "5899fa9bcf8f3824e5d8bb33cd8282a7abd5480bb0d27b1c3a233f74d09786a8@group.calendar.google.com"
+          }
         });
         calendar.render();
       });
