@@ -1,21 +1,39 @@
-<!DOCTYPE html>
-<html lang='en'>
-  <head>
-    <meta charset='utf-8' />
-    <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
-    <script>
+<div class="page-width section-{{ section.id }}-padding">
+    <div id="calendar"></div>
+</div>
 
-      document.addEventListener('DOMContentLoaded', function() {
-        var calendarEl = document.getElementById('calendar');
-        var calendar = new FullCalendar.Calendar(calendarEl, {
-          initialView: 'dayGridMonth',
-        });
-        calendar.render();
-      });
+<!-- FullCalendarライブラリ -->
+<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
+<!-- FullCalendarのGoogleカレンダー用ライブラリ -->
+<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js"></script>
 
-    </script>
-  </head>
-  <body>
-    <div id='calendar'></div>
-  </body>
-</html>
+<script>
+    const calendarEl = document.getElementById('calendar');
+    var calendar = new FullCalendar.Calendar(calendarEl, {
+        googleCalendarApiKey: "AIzaSyA9iTpENaQ5ewT_yrzUCaG6Pw1gLkcqzCc", // 実際のAPIキーで置き換える
+        eventSources: [
+            {
+				//スケジュール1
+                googleCalendarId: 'osss037.parents@gmail.com',
+		className: 'calendar_1'
+				
+            },
+            {
+				//スケジュール２
+                googleCalendarId: '5899fa9bcf8f3824e5d8bb33cd8282a7abd5480bb0d27b1c3a233f74d09786a8@group.calendar.google.com',
+                className: 'calendar_2'
+            },
+            {
+				//スケジュール3
+                googleCalendarId: 'e3d779bd88071e5eafe5a1cdcdfec8a3b844f72503e533c0f08c9bf7588a5ec1@group.calendar.google.com',
+                className: 'calendar_2'
+            }
+        ],
+        timeZone: "Asia/Tokyo", 
+        locale: "jp",
+        dayCellContent: function(arg){
+            return arg.date.getDate();
+        },
+    });
+    calendar.render();
+</script>
