@@ -1,39 +1,197 @@
-<div class="page-width section-{{ section.id }}-padding">
-    <div id="calendar"></div>
-</div>
 
-<!-- FullCalendarライブラリ -->
-<script src="https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js"></script>
-<!-- FullCalendarのGoogleカレンダー用ライブラリ -->
-<script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.10/index.global.min.js"></script>
+<!DOCTYPE html>
+<html lang='ja'>
 
-<script>
-    const calendarEl = document.getElementById('calendar');
-    var calendar = new FullCalendar.Calendar(calendarEl, {
-        googleCalendarApiKey: "AIzaSyA9iTpENaQ5ewT_yrzUCaG6Pw1gLkcqzCc", // 実際のAPIキーで置き換える
-        eventSources: [
-            {
-				//スケジュール1
-                googleCalendarId: 'osss037.parents@gmail.com',
-		className: 'calendar_1'
-				
-            },
-            {
-				//スケジュール２
-                googleCalendarId: '5899fa9bcf8f3824e5d8bb33cd8282a7abd5480bb0d27b1c3a233f74d09786a8@group.calendar.google.com',
-                className: 'calendar_2'
-            },
-            {
-				//スケジュール3
-                googleCalendarId: 'e3d779bd88071e5eafe5a1cdcdfec8a3b844f72503e533c0f08c9bf7588a5ec1@group.calendar.google.com',
-                className: 'calendar_2'
-            }
-        ],
-        timeZone: "Asia/Tokyo", 
-        locale: "jp",
-        dayCellContent: function(arg){
-            return arg.date.getDate();
+<head>
+  <meta charset='utf-8' />
+
+  <style>
+    a.fc-event {
+      display: block;
+      cursor: pointer;
+    }
+
+    #popup_container {
+      width: 100vw;
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      z-index: 1000;
+      background-color: #444e;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      cursor: pointer;
+
+      /* キャプションが空になると非表示 */
+      &:has(caption:empty) {
+        display: none;
+      }
+
+      #popup {
+        background-color: #fff;
+        padding: 1em;
+        border-radius: 1em;
+
+        /* いずれかのセルが空になると非表示 */
+        & table tr:has(td:empty) {
+          display: none;
+        }
+
+        & td {
+          vertical-align: top;
+          padding-top: 0.5em;
+        }
+        & tr>td:first-child {
+          text-wrap: nowrap;
+        }
+        & tr>td:last-child {
+          text-wrap: wrap;
+          width: 20cap;
+        }
+      }
+    }
+  </style>
+
+
+
+
+  <script src='https://cdn.jsdelivr.net/npm/fullcalendar@6.1.10/index.global.min.js'></script>
+  <script src='https://unpkg.com/browse/@fullcalendar/core@4.4.0/locales/ja.js'></script>
+  <script src="https://cdn.jsdelivr.net/npm/@fullcalendar/google-calendar@6.1.6/index.global.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.7.1/jquery.min.js"></script>
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+        var calendarEl = document.getElementById('calendar');
+        var calendar = new FullCalendar.Calendar(calendarEl, {
+            googleCalendarApiKey: "AIzaSyA9iTpENaQ5ewT_yrzUCaG6Pw1gLkcqzCc", // APIキーで置き換える
+            eventSources: [
+                {
+                    //スケジュール1
+                    googleCalendarId: 'osss037.parents@gmail.com',
+                    className: 'calendar_1'
+                },
+                {
+                    //スケジュール２
+                    color: 'green',
+                    googleCalendarId: '5899fa9bcf8f3824e5d8bb33cd8282a7abd5480bb0d27b1c3a233f74d09786a8@group.calendar.google.com',
+                    className: 'calendar_2'
+                },
+                {
+                    //スケジュール3
+                    color: 'red',
+                    googleCalendarId: 'e3d779bd88071e5eafe5a1cdcdfec8a3b844f72503e533c0f08c9bf7588a5ec1@group.calendar.google.com',
+                    className: 'calendar_3'
+                }
+            ],
+
+
+
+
+        height: 'calc( 100% )',
+        aspectRatio: 1,
+        //locale: 'ja',
+        timeZone: 'Asia/Tokyo',
+        eventTimeFormat: { // like '14:30'
+          hour: '2-digit',
+          minute: '2-digit',
+          hour12: false
         },
+
+        googleCalendarApiKey: 'AIzaSyAm9ZmrL8FI2Mhw_4eBy4SORYSo-aVEtSM',
+        events: {
+          googleCalendarId: 'dns.komoro@gmail.com',
+          className: 'gcal-event' // an option!
+        },
+
+        eventDidMount: function (arg) {
+          // ジャンプしないように href を削除
+          arg.el.removeAttribute('href');
+
+          return arg.el;
+        },
+        
+        eventClick: function (info) {
+          // ポップアップ内要素にイベント情報を埋めていく
+
+          // 期間を書式化
+          let strRange = FullCalendar.formatRange(info.event._instance.range.start, info.event._instance.range.end, {
+            month: 'numeric',
+            year: 'numeric',
+            day: 'numeric',
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: false,
+            separator: ' ～ ',
+            locale: 'ja',
+            timeZone: 'Asia/Tokyo',
+          })
+          document.getElementById('range_value').innerText = strRange;
+
+          if (info.event._def.extendedProps.location !== undefined) {
+            document.getElementById('location_value').innerText = info.event._def.extendedProps.location;
+          }
+          else {
+            document.getElementById('location_value').innerText = '';
+          }
+          if (info.event._def.extendedProps.description !== undefined) {
+            document.getElementById('description_value').innerText = info.event._def.extendedProps.description;
+          }
+          else {
+            document.getElementById('description_value').innerText = '';
+          }
+          
+          // ※タイトルをキャプションに埋めた時点で、ポップアップが表示に切り替わる
+          document.getElementById('title_value').innerText = info.event.title;
+        },
+
+
+
+        initialView: 'dayGridMonth',
+        businessHours: true,
+      });
+      calendar.render();
     });
-    calendar.render();
-</script>
+
+  </script>
+</head>
+
+<body>
+  <div id='popup_container'>
+    <div id="popup">
+      <table>
+        <caption id="title_value"></caption>
+        <tr>
+          <td>期間：</td>
+          <td id="range_value"></td>
+        </tr>
+        <tr>
+          <td>場所：</td>
+          <td id="location_value"></td>
+        </tr>
+        <tr>
+          <td>説明：</td>
+          <td id="description_value"></td>
+        </tr>
+      </table>
+    </div>
+  </div>
+
+  <div id='calendar' style="height: 100vh;"></div>
+
+  <script>
+
+    $(function () {
+      // ポップアップがクリックされたらキャプションを空に → ポップアップが非表示になる
+      $('#popup_container').click( function() {
+        $('caption').text('');
+      });
+
+
+    });
+  </script>
+
+</body>
+
+</html>
